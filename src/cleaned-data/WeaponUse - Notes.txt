@@ -1,0 +1,13 @@
+Gun
+- Firearm
+- Handgun
+- Rifle
+- Shotgun
+
+Other
+- Fall
+- Fire
+- Explosives
+- Drowning
+- Drugs
+- Poison

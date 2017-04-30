@@ -1,0 +1,16 @@
+Family
+- Brother
+- Daughter
+- Father
+- In-law
+- Mother
+- Sister
+- Son
+- Stepmother
+- Stepfather
+- Stepson
+- Stepdaughter
+
+Coworker
+- Employee
+- Employer
