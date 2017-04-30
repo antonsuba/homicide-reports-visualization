@@ -1,4 +1,4 @@
-let width = 900,
+let width = 780,
     height = 450;
 
 d3.csv('data/CrimeByRelationshipBySex.csv', (d) => {
@@ -16,20 +16,23 @@ d3.csv('data/CrimeByRelationshipBySex.csv', (d) => {
 },
 function (error, data){
     let maxData = 126000;
+    let margin = {
+        right:70
+    }
 
     let crimeByRelationshipBySex = d3.nest()
         .key((d) => d.victim_sex)
         .entries(data);
 
-    let femaleData = [];
-    let tempFemale = crimeByRelationshipBySex[0].values[0];
-    for(let objKey of Object.keys(tempFemale)){
+    let dataArray = [];
+    let tempArray = crimeByRelationshipBySex[1].values[0];
+    for(let objKey of Object.keys(tempArray)){
         if(objKey == 'victim_sex') continue;
-        femaleData.push({ key:objKey, value:tempFemale[objKey] })
+        dataArray.push({ key:objKey, value:tempArray[objKey] })
     }
-    femaleData.sort((a,b) => b.value - a.value);
+    dataArray.sort((a,b) => b.value - a.value);
 
-    console.log(femaleData);
+    console.log(dataArray);
 
     let svg = d3.select('#relationship-graph').append('svg')
         .attr("width", width)
@@ -38,11 +41,11 @@ function (error, data){
 
     let x = d3.scale.linear()
         .domain([0, maxData])
-        .range([0, width]);
+        .range([0, width - margin.right]);
 
     let y = d3.scale.ordinal()
-        .rangeRoundBands([0, 500], .1)
-        .domain(femaleData.map(d => d.key));
+        .rangeRoundBands([0, height], .1)
+        .domain(dataArray.map(d => d.key));
 
     let yAxis = d3.svg.axis()
         .scale(y)
@@ -50,25 +53,31 @@ function (error, data){
         .orient('left');
 
     let horizontalChart = svg.append('g')
-        .attr('class', 'yAxis')
+        .attr('class', 'y axis')
         .call(yAxis);
     
     let bars = svg.selectAll('.bar')
-        .data(femaleData)
+        .data(dataArray)
         .enter()
         .append('g');
 
     bars.append('rect')
         .attr('class', 'bar')
         .attr('y', d => y(d.key))
-        .attr('height', 10)
+        .attr('height', 8)
         .attr('x', 0)
+        .attr('width', 0)
+        .transition()
+        .duration(1500)
         .attr('width', d => x(d.value));
 
     bars.append('text')
         .attr("class", "label")
         .attr("y", d => y(d.key) + y.rangeBand() / 8 + 4)
-        .attr("x", d => x(d.value) + 8)
-        .text(d => d.value);
+        .attr("x", 0)
+        .text(d => d.value)
+        .transition()
+        .duration(1500)
+        .attr("x", d => x(d.value) + 8);
 }
 );
