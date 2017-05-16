@@ -1,4 +1,12 @@
 @charset "UTF-8";
+body {
+  font-family: "Cardo", serif;
+  font-size: 1.2em; }
+
+h1 {
+  font-family: "Montserrat", sans-serif !important;
+  font-size: 4em; }
+
 /* ========================================================================
    Component: Base
  ========================================================================== */
@@ -1995,7 +2003,7 @@ select.uk-form-width-xsmall {
 .uk-container {
   box-sizing: content-box;
   /* 1 */
-  max-width: 1200px;
+  max-width: 1360px;
   margin-left: auto;
   margin-right: auto;
   padding-left: 15px;

@@ -13,19 +13,46 @@
   <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
   <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">-->
 
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Cardo" rel="stylesheet">
+
   <link rel="stylesheet" href="css/main.css">
 
 </head>
 <body>
 
-<div uk-grid>
-  <div class="uk-width-1-3@s uk-flex uk-flex-middle uk-flex-center" uk-height-viewport>
-    <h1>Title Here</h1>
+<div class="uk-container">
+  
+  <div class="uk-grid-large" uk-grid uk-height-viewport>
+    <div class="uk-width-1-3@s uk-flex uk-flex-middle uk-flex-center">
+      <div>
+        <h1>Title Here</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in dolor sem. Etiam a sodales turpis. 
+          Quisque accumsan felis justo, nec ultricies quam fringilla id. Fusce turpis tellus, 
+          eleifend ac ultricies in, volutpat et massa. Ut eu eleifend ipsum, non hendrerit mauris. 
+        </p>
+        <p>
+          Morbi eleifend ante sit amet nibh elementum bibendum. Ut sed nisl ac orci lacinia venenatis id at nunc. 
+          Cras sem dolor, elementum at velit at, semper blandit ligula. Orci varius natoque penatibus 
+          et magnis dis parturient montes, nascetur ridiculus mus.
+        </p>
+      </div>
+    </div>
+
+    <div class="uk-width-2-3@s uk-flex uk-flex-middle uk-flex-center">
+      <div>
+        <div id="relationship-graph"></div>
+        <div class="uk-flex uk-flex-center">
+          <div class="uk-button-group">
+            <button class="uk-button uk-button-default" onclick="updateHorizontalChart()">Male</button>
+            <button class="uk-button uk-button-default" onclick="updateHorizontalChart()">Female</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="uk-width-2-3@s uk-flex uk-flex-middle uk-flex-center" uk-height-viewport>
-    <div id="relationship-graph" ></div>
-  </div>
 </div>
 
 <script src="js/vendor/jquery.min.js"></script>

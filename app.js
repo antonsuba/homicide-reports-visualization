@@ -108,6 +108,3 @@ function updateHorizontalChart(){
         .duration(1500)
         .attr('width', d => x(d.value));
 }
-
-
-updateHorizontalChart();

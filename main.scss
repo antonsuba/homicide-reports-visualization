@@ -1,12 +1,40 @@
-// Custom variables
-$main-text-color: white;
-$background-color: #181743;
+//=========================
+//
+// Custom Variables
+//
+//=========================
+$main-font-color: #1F2324;
 
+$header-font: 'Montserrat', sans-serif;
+$main-font: 'Cardo', serif;
 
+body{
+    font-family: $main-font;
+    font-size: 1.2em;
+}
+
+h1{
+    font-family: $header-font !important;
+    font-size:  4em;
+}
+
+//=========================
+// Container
+//=========================
+$container-max-width: 1360px;
+
+//=========================
+//
 // Import default variables and available mixins.
+//
+//=========================
 @import "uikit/src/scss/variables-theme.scss";
 @import "uikit/src/scss/mixins-theme.scss";
 
 
-// Import UIkit.
+//=========================
+//
+// Import UIkit
+//
+//=========================
 @import "uikit/src/scss/uikit-theme.scss";
