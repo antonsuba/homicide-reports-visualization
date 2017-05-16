@@ -1,0 +1,12 @@
+// Custom variables
+$main-text-color: white;
+$background-color: #181743;
+
+
+// Import default variables and available mixins.
+@import "uikit/src/scss/variables-theme.scss";
+@import "uikit/src/scss/mixins-theme.scss";
+
+
+// Import UIkit.
+@import "uikit/src/scss/uikit-theme.scss";
