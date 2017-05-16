@@ -1,6 +1,16 @@
-let width = 780,
+//=========================
+// Global Vars
+//=========================
+let width = 820,
     height = 450;
 
+let firstChartState = 1;
+let firstChartArray = [[],[]];
+
+
+//=========================
+// Initialize First Chart
+//=========================
 d3.csv('data/CrimeByRelationshipBySex.csv', (d) => {
     return {
         victim_sex: d.victim_sex,
@@ -17,6 +27,7 @@ d3.csv('data/CrimeByRelationshipBySex.csv', (d) => {
 function (error, data){
     let maxData = 126000;
     let margin = {
+        left:70,
         right:70
     }
 
@@ -24,20 +35,23 @@ function (error, data){
         .key((d) => d.victim_sex)
         .entries(data);
 
-    let dataArray = [];
-    let tempArray = crimeByRelationshipBySex[1].values[0];
-    for(let objKey of Object.keys(tempArray)){
-        if(objKey == 'victim_sex') continue;
-        dataArray.push({ key:objKey, value:tempArray[objKey] })
-    }
-    dataArray.sort((a,b) => b.value - a.value);
+    for(let i = 0; i < 2; i++){
+        let tempArray = crimeByRelationshipBySex[i].values[0];
 
-    console.log(dataArray);
+        for(let objKey of Object.keys(tempArray)){
+            if(objKey == 'victim_sex') continue;
+            firstChartArray[i].push({ key:objKey, value:tempArray[objKey] })
+        }
+        firstChartArray[i].sort((a,b) => b.value - a.value);
+    }
+
+
+    console.log("firstChartArray ", firstChartArray);
 
     let svg = d3.select('#relationship-graph').append('svg')
         .attr("width", width)
         .attr("height", height)
-        .attr('transform', 'translate(150,0)');
+        .attr('transform', `translate(${margin.left}, 0)`);
 
     let x = d3.scale.linear()
         .domain([0, maxData])
@@ -45,7 +59,7 @@ function (error, data){
 
     let y = d3.scale.ordinal()
         .rangeRoundBands([0, height], .1)
-        .domain(dataArray.map(d => d.key));
+        .domain(firstChartArray[firstChartState].map(d => d.key));
 
     let yAxis = d3.svg.axis()
         .scale(y)
@@ -57,7 +71,7 @@ function (error, data){
         .call(yAxis);
     
     let bars = svg.selectAll('.bar')
-        .data(dataArray)
+        .data(firstChartArray[firstChartState])
         .enter()
         .append('g');
 
@@ -74,10 +88,26 @@ function (error, data){
     bars.append('text')
         .attr("class", "label")
         .attr("y", d => y(d.key) + y.rangeBand() / 8 + 4)
-        .attr("x", 0)
+        .attr("x", 10)
         .text(d => d.value)
         .transition()
         .duration(1500)
-        .attr("x", d => x(d.value) + 8);
+        .attr("x", d => x(d.value) + 10);
 }
 );
+
+function updateHorizontalChart(){
+    if(firstChartState == 1) firstChartState = 0;
+    else firstChartState = 1;
+
+    let bars = d3.selectAll('.bar')
+        .data(firstChartArray[firstChartState])
+        .enter();
+
+    bars.transition()
+        .duration(1500)
+        .attr('width', d => x(d.value));
+}
+
+
+updateHorizontalChart();
