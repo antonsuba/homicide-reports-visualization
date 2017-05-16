@@ -45,9 +45,6 @@ function (error, data){
         firstChartArray[i].sort((a,b) => b.value - a.value);
     }
 
-
-    console.log("firstChartArray ", firstChartArray);
-
     let svg = d3.select('#relationship-graph').append('svg')
         .attr("width", width)
         .attr("height", height)
@@ -86,25 +83,50 @@ function (error, data){
         .attr('width', d => x(d.value));
 
     bars.append('text')
-        .attr("class", "label")
+        .attr('class', 'label')
         .attr("y", d => y(d.key) + y.rangeBand() / 8 + 4)
         .attr("x", 10)
         .text(d => d.value)
         .transition()
         .duration(1500)
         .attr("x", d => x(d.value) + 10);
+
+    d3.select('#chart1-male-btn').on('click', () => {
+        let widthArray = firstChartArray[1].map(d => x(d.value));
+        updateHorizontalChart(firstChartArray[1], widthArray);
+    });
+
+    d3.select('#chart1-female-btn').on('click', () => {
+        let widthArray = firstChartArray[0].map(d => x(d.value));
+        updateHorizontalChart(firstChartArray[0], widthArray);
+    });
 }
 );
 
-function updateHorizontalChart(){
-    if(firstChartState == 1) firstChartState = 0;
-    else firstChartState = 1;
-
-    let bars = d3.selectAll('.bar')
-        .data(firstChartArray[firstChartState])
-        .enter();
+function updateHorizontalChart(dataSet, widthArray){
+    
+    let counter = -1;
+    let bars = d3.select("#relationship-graph").selectAll('.bar');
 
     bars.transition()
         .duration(1500)
-        .attr('width', d => x(d.value));
+        .attr('width', () => {
+            counter++;
+            return widthArray[counter];
+        });
+
+    dataSetCounter = -1;
+    counter = -1;
+    let labels = d3.select("#relationship-graph").selectAll('.label');
+
+    labels.transition()
+        .duration(1500)
+        .text(() => {
+            dataSetCounter++;
+            return dataSet[dataSetCounter].value;
+        })
+        .attr('x', () => {
+            counter++;
+            return widthArray[counter] + 10;
+        });
 }

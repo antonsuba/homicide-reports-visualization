@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.bar {
+  fill: steelblue;
+}
+
+.axis path {
+  display: none;
+}
+</style>
+    
+<title>My first d3 plot</title>
+</head>
+<body>
+    <svg id="svg" width="1050" height="930" transform = "rotate(-180 100 100)"></svg></div>
+
+<script src="js/d3.min.js"></script> 
+<script>
+
+var svg = d3.select("#svg"),
+    margin = {top: 20, right: 40, bottom: 30, left: 40},
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var y = d3.scaleBand()
+    .rangeRound([0, width])
+    .padding(0.1)
+    .align(0.1);
+
+var x = d3.scaleLinear()
+    .rangeRound([height, 0]);
+
+var z = d3.scaleOrdinal()
+    .range(["#0c0101", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ebf442","#364cbc"]);
+
+var stack = d3.stack()
+    .offset(d3.stackOffsetExpand);
+
+
+
+d3.csv("data/VictimPerpetratorRaceAndSex.csv", function(error, data) {
+    if (error) throw error;
+    console.log(data);
+    data.sort(function(a, b) { return b[data.columns[1]] / b.total - a[data.columns[1]] / a.total; });
+
+    y.domain(data.map(function(d) { return d.sex; }));
+    z.domain(data.columns.slice(1));
+  
+    
+var serie = g.selectAll(".serie")
+    .data(stack.keys(data.columns.slice(1))(data))
+    .enter().append("g")
+    .attr("class", "serie")
+    .attr("fill", function(d) { return z(d.key); });
+
+serie.selectAll("rect")
+    .data(function(d) { return d; })
+    .enter().append("rect")
+    .attr("y", function(d) { return y(d.data.sex); })
+    .attr("x", function(d) { return x(d[1]); })
+    .attr("width", function(d) { return x(d[0]) - x(d[1]); })
+    .attr("height", y.bandwidth());
+     // .attr("transform", "translate(" + 5 + "," + 6 + ")")
+g.append("g")
+    .attr("class", "axis axis--x")
+    .call(d3.axisTop(x).ticks(10,"%"))
+    .attr("transforn", "scale(-1,1)")
+    .style("text-anchor", "end")
+    .selectAll("text")  
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", "rotate(-180)");
+  
+g.append("g")
+    .attr("class", "axis axis--y")
+    .attr("transform", "translate(880," + 0 + ")")
+    .attr("transform", "rotate(180,470,460)")
+    .call(d3.axisRight(y).ticks(5, "s"));
+        
+var legend = g.selectAll(".legend")
+    .data(data.columns.slice(1).reverse())
+    .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; })
+    .style("font", "10px sans-serif");
+
+legend.append("rect")
+    .attr("x", width + 25)
+    .attr("width", 18)
+    .attr("height", 18)
+    .attr("fill", z);
+      
+
+legend.append("text")
+     // .attr("x", width + 25)
+     // .attr("y", 9)
+      //.attr("dy", ".35em")
+    .attr("text-anchor", "end")
+    .text(function(d) { return d; })
+    .attr("transform", "rotate(180,475,2)");
+      });
+
+        
+
+           // data.sort(function(a,b) {return b.total - a.total;});
+
+      
+
+
+
+            
+
+
+      
+
+    
+
+
+
+
+
+
+        
+    
+        </script>
+
+</body>
