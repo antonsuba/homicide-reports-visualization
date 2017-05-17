@@ -19,21 +19,6 @@ h1 {
   position: absolute;
   z-index: 100; }
 
-.map-button {
-  display: inline-block;
-  color: #FFFFFF;
-  background-color: #315591;
-  font-size: 0.9em;
-  padding: 10px;
-  border-radius: 2px; }
-
-.map-button:hover {
-  background-color: #264270;
-  cursor: pointer; }
-
-.active-button {
-  background-color: #264270; }
-
 /* ========================================================================
    Component: Base
  ========================================================================== */

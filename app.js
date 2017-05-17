@@ -12,7 +12,7 @@ let firstChartArray = [[],[]];
 // Initialize First Chart
 //=========================
 function renderFirstChart(){
-    d3_v3.csv('data/CrimeByRelationshipBySex.csv', (d) => {
+    d3_v3.csv('data/CrimeByRelationshipBySex.csv', d => {
         return {
             victim_sex: d.victim_sex,
             acquaintance_friend: d.Acquaintance_Friend,
@@ -147,14 +147,15 @@ function renderSecondChart(){
 
     let y = d3_v4.scaleBand()
         .rangeRound([0, width - 500])
-        .padding(0.5)
+        .padding(0.6)
         .align(0.15);
 
     let x = d3_v4.scaleLinear()
         .rangeRound([900-200, 0]);
 
     let vert = d3_v4.scaleBand()
-        .domain(["White Male", "White Female", "Native American/Alaska Native-Male", "Native American/Alska Native-Female","Black-Male","Black-Female", "Asian/Pacific Islander-Male","Asian/Pacific Islander-Female",])
+      //  .domain(["White Male", "White Female", "Native American/Alaska Native-Male", "Native American/Alska Native-Female","Black-Male","Black-Female", "Asian/Pacific Islander-Male","Asian/Pacific Islander-Female",])
+        .domain(["Asian/Pacific Islander-Female","Asian/Pacific Islander-Male","Black-Female","Black-Male","Native American/Alska Native-Female","Native American/Alaska Native-Male","White Female","White Male",])
         .rangeRound([0, width - 500])
         .padding(0.5)
         .align(0.15);
@@ -194,24 +195,25 @@ function renderSecondChart(){
         .attr("x", function(d) { return x(d[1]); })
         .attr("width", function(d) { return x(d[0]) - x(d[1]); })
         .attr("height", y.bandwidth())
-        .attr("transform", "translate(0," + 0 + ")");
+        .attr("transform", "translate(100," + 425 + ")");
 
     g.append("g")
         .attr("class", "axis axis--x")
         .call(d3_v4.axisTop(x).ticks(10,"%"))
-        .attr("transforn", "scale(-1,1)")
         .style("text-anchor", "end")
+        .attr("transform", "translate(100," + 420+ ")")
         .selectAll("text")  
         .style("text-anchor", "end")
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
-        .attr("transform", "rotate(-180)");
+        .attr("transform", "rotate(-180,-10,-15)");
     
     g.append("g")
         .attr("class", "y axis")
-        .attr("transform", "translate(880," + 0 + ")")
-        .attr("transform", "rotate(180,450,400)")
+        .attr("transform", "translate(800,"+415+")")
         .call(yAxis)
+        .selectAll("text")
+        .attr("transform", "rotate(180,95,0)");
 
     let legend = g.selectAll(".legend")
         .data(data.columns.slice(1).reverse())
@@ -222,19 +224,19 @@ function renderSecondChart(){
 
     legend.append("rect")
         .attr("x", width + 25)
-        .attr("transform", "translate(-1120,"+ 800+ ")")
+        .attr("transform", "translate(-1120,"+ 790+ ")")
         .attr("width", 15)
         .attr("height", 15)
         .attr("fill", z);
 
-    legend.append("text")
+     legend.append("text")
         // .attr("x", width + 25)
         // .attr("y", 9)
         //.attr("dy", ".35em")
         .attr("text-anchor", "end")
         .text(function(d) { return d; })
         .attr("transform", "translate(200,"+ 5+ ")")
-        .attr("transform", "rotate(180,15,402)");
+        .attr("transform", "rotate(180,15,397)");
         
     });
 }
@@ -246,16 +248,43 @@ function renderSecondChart(){
 let active = 0;
             
 function mapbutton1(){
+    document.getElementById('murder-rate-title').innerHTML = 'Percentage of Murders Caused by Gun';
+    document.getElementById('murder-rate-text').innerHTML = 
+        `This data was calculated by summing up all recorded murders in each state
+	    (from 1980-2014) where the murder weapon used was a gun and dividing the
+	    values by the total number of recorded murders for each respective state.
+	    This should give us a good idea of which states have been more prone to
+	    gun violence historically.`;
+
     selectActive(0);
-    updateMap(usMapData);
+    renderThirdChart.updateMap();
 }
 function mapbutton2(){
+    document.getElementById('murder-rate-title').innerHTML = 'Gun Murder Rate per 100 000';
+    document.getElementById('murder-rate-text').innerHTML = 
+        `This data was calculated by getting the number of gun-related murders per
+	    100,000 for each state. This was calculated for each state yearly from
+	    1980-2014 so the average rate could be taken. The yearly changes of population 
+	    for each state were also taken into consideration. The population data was 
+	    obtained <a href="http://www.nber.org/data/census-intercensal-county-population.html">here</a>.`;
+
     selectActive(1);
-    updateMap(usMapData);
+    renderThirdChart.updateMap();
 }
 function mapbutton3(){
+    let x = 'anton';
+    let y = `hi ${x}`;
+
+    document.getElementById('murder-rate-title').innerHTML = 'Murder Rate per 100 000';
+    document.getElementById('murder-rate-text').innerHTML = 
+        `This data was calculated by getting the number of all murders per 100,000 
+	    for each state. This was calculated for each state yearly from 1980-2014 
+	    so the average rate could be taken. The yearly changes of population for
+	    each state were also taken into consideration. The population data was 
+    	obtained <a>here</a>.`;
+
     selectActive(2);
-    updateMap(usMapData);
+    renderThirdChart.updateMap();
 }
 
 function selectActive(num){
@@ -321,7 +350,7 @@ function renderThirdChart(){
         updateMap(usMapData);
     };
 
-    function updateMap(data){
+    function updateMap(data = usMapData){
         if(active == 0){
             percentMurderByGun(data);
         } else if (active == 1){
@@ -414,6 +443,8 @@ function renderThirdChart(){
                 tooltip.classed('hidden', true);
             });
     }
+
+    renderThirdChart.updateMap = updateMap;
 }
 
 renderFirstChart();
