@@ -130,3 +130,109 @@ function updateHorizontalChart(dataSet, widthArray){
             return widthArray[counter] + 10;
         });
 }
+
+
+//=========================
+// Initialize Second Chart
+//=========================
+d3.csv("data/VictimPerpetratorRaceAndSex.csv", (error, data) => {
+    let svg = d3.select("#race-sex-svg"),
+        margin = {top: 100, right: 100, bottom: 30, left: 20},
+        width = +svg.attr("width"),
+        height = +svg.attr("height") ,
+        g = svg.append("g").attr("transform", "translate(" + margin.right + "," + 50 + ")");
+
+
+    let y = d3.scaleBand()
+        .rangeRound([0, width-200])
+        .padding(0.6)
+        .align(0.15);
+
+    let x = d3.scaleLinear()
+        .rangeRound([900-200, 0]);
+
+    let vert = d3.scaleBand()
+        .domain(["White Male", "White Female", "Native American/Alaska Native-Male", "Native American/Alska Native-Female","Black-Male","Black-Female", "Asian/Pacific Islander-Male","Asian/Pacific Islander-Female",])
+        .rangeRound([0, width-200])
+        .padding(0.6)
+        .align(0.15);
+
+    let yAxis = d3.axisRight()
+        .tickSizeOuter(0)
+        .scale(vert)
+        
+
+    let z = d3.scaleOrdinal()
+        .range(["#0c0101", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ebf442","#364cbc"]);
+
+    let stack = d3.stack()
+        .offset(d3.stackOffsetExpand);
+
+    if (error) throw error;
+    console.log(data);
+    data.sort(function(a, b) { return b[data.columns[1]] / b.total - a[data.columns[1]] / a.total; });
+
+    y.domain(data.map(function(d) { return d.sex; }));
+    z.domain(data.columns.slice(1));
+  
+    
+    let serie = g.selectAll(".serie")
+        .data(stack.keys(data.columns.slice(1))(data))
+        .enter().append("g")
+        .attr("class", "serie")
+        .attr("fill", function(d) { return z(d.key); });
+
+    serie.selectAll("rect")
+        .data(function(d) { return d; })
+        .enter().append("rect")
+        .attr("y", function(d) { return y(d.data.sex); })
+        .attr("x", function(d) { return x(d[1]); })
+        .attr("width", function(d) { return x(d[0]) - x(d[1]); })
+        .attr("height", y.bandwidth())
+        .attr("transform", "translate(0," + 0 + ")");
+
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .call(d3.axisTop(x).ticks(10,"%"))
+        .attr("transforn", "scale(-1,1)")
+        .style("text-anchor", "end")
+        .selectAll("text")  
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-180)")
+        ;
+    
+    g.append("g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(880," + 0 + ")")
+        .attr("transform", "rotate(180,450,400)")
+        .call(yAxis)
+
+    let legend = g.selectAll(".legend")
+        .data(data.columns.slice(1).reverse())
+        .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; })
+        .style("font", "10px sans-serif");
+
+    legend.append("rect")
+        .attr("x", width + 25)
+        .attr("transform", "translate(-1120,"+ 800+ ")")
+        .attr("width", 15)
+        .attr("height", 15)
+        .attr("fill", z);
+        
+
+    legend.append("text")
+        .attr("text-anchor", "end")
+        .text(function(d) { return d; })
+        .attr("transform", "translate(200,"+ 5+ ")")
+        .attr("transform", "rotate(180,15,402)");
+    
+});
+
+
+//=========================
+// Initialize Third Chart
+//=========================
