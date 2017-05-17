@@ -84,22 +84,24 @@
       <div>
         <h1>Title Here</h1>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in dolor sem. Etiam a sodales turpis. 
-          Quisque accumsan felis justo, nec ultricies quam fringilla id. Fusce turpis tellus, 
-          eleifend ac ultricies in, volutpat et massa. Ut eu eleifend ipsum, non hendrerit mauris. 
-        </p>
-        <p>
-          Morbi eleifend ante sit amet nibh elementum bibendum. Ut sed nisl ac orci lacinia venenatis id at nunc. 
-          Cras sem dolor, elementum at velit at, semper blandit ligula. Orci varius natoque penatibus 
-          et magnis dis parturient montes, nascetur ridiculus mus.
+          This data was calculated by summing up all recorded murders in each state
+          (from 1980-2014) where the murder weapon used was a gun and dividing the
+          values by the total number of recorded murders for each respective state.
+          This should give us a good idea of which states have been more prone to
+          gun violence historically. 
         </p>
       </div>
     </div>
 
     <div class="uk-width-2-3@s uk-flex uk-flex-middle uk-flex-center">
-      <div>
-        <div id="race-sex-graph">
-          <svg id="race-sex-svg" width="800" height="600" transform = "rotate(-180 100 100)"></svg>
+      <div id="murder-graph-container">
+        <div id="murder-rate-graph"></div><br>
+        <div class="uk-flex uk-flex-center">
+          <div class="uk-button-group">
+            <div id="button1" class="map-button active-button" onclick="mapbutton1()">Percentage of Murders by Gun</div>
+            <div id="button2" class="map-button" onclick="mapbutton2()">Gun Murders per 100000</div>
+            <div id="button3" class="map-button" onclick="mapbutton3()">Murders per 100000</div>
+          </div>
         </div>
       </div>
     </div>
@@ -107,22 +109,14 @@
 
 </div>
 
-<script src="js/vendor/jquery.min.js"></script>
-<script src="js/default.js"></script>
-<script src="js/d3.min-v3.js"></script>
-<!--<script src="js/d3.min-v4.js"></script>-->
-<script src="app.js"></script>
-
-<!-- Google Analytics: change UA-XXXXX-Y ID -->
-<script>
-  window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
-  ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
-</script>
-<script src="https://www.google-analytics.com/analytics.js" async defer></script>
-
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous">
 </script>
 <script src="js/uikit.min.js"></script>
+
+<script src="js/d3.js"></script>
+<script src="https://d3js.org/d3-queue.v3.min.js"></script>
+
+<script src="app.js"></script>
 
 </body>
 </html>

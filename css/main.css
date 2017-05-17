@@ -16,7 +16,8 @@ h1 {
   padding: 1em;
   border-radius: 5px;
   opacity: 0.9;
-  position: absolute; }
+  position: absolute;
+  z-index: 100; }
 
 .map-button {
   display: inline-block;
