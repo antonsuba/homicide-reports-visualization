@@ -12,8 +12,6 @@ let firstChartArray = [[],[]];
 // Initialize First Chart
 //=========================
 function renderFirstChart(){
-    // d3_v3 = d3_v3_v3;
-
     d3_v3.csv('data/CrimeByRelationshipBySex.csv', (d) => {
         return {
             victim_sex: d.victim_sex,
@@ -141,15 +139,15 @@ function updateHorizontalChart(dataSet, widthArray){
 //=========================
 function renderSecondChart(){
     let svg = d3_v4.select("#race-sex-svg"),
-        margin = {top: 100, right: 100, bottom: 30, left: 20},
+        margin = {top: 0, right: 100, bottom: 30, left: 20},
         width = +svg.attr("width"),
         height = +svg.attr("height") ,
         g = svg.append("g").attr("transform", "translate(" + margin.right + "," + 50 + ")");
 
 
     let y = d3_v4.scaleBand()
-        .rangeRound([0, width-200])
-        .padding(0.6)
+        .rangeRound([0, width - 500])
+        .padding(0.5)
         .align(0.15);
 
     let x = d3_v4.scaleLinear()
@@ -157,8 +155,8 @@ function renderSecondChart(){
 
     let vert = d3_v4.scaleBand()
         .domain(["White Male", "White Female", "Native American/Alaska Native-Male", "Native American/Alska Native-Female","Black-Male","Black-Female", "Asian/Pacific Islander-Male","Asian/Pacific Islander-Female",])
-        .rangeRound([0, width-200])
-        .padding(0.6)
+        .rangeRound([0, width - 500])
+        .padding(0.5)
         .align(0.15);
 
     let yAxis = d3_v4.axisRight()
@@ -245,33 +243,31 @@ function renderSecondChart(){
 //=========================
 // Initialize Third Chart
 //=========================
-function renderThirdChart(){
-    // d3_v3 = d3_v3_v3;
-
-    let active = 0;
+let active = 0;
             
-    function mapbutton1(){
-        selectActive(0);
-        updateMap(usMapData);
-    }
-    function mapbutton2(){
-        selectActive(1);
-        updateMap(usMapData);
-    }
-    function mapbutton3(){
-        selectActive(2);
-        updateMap(usMapData);
-    }
+function mapbutton1(){
+    selectActive(0);
+    updateMap(usMapData);
+}
+function mapbutton2(){
+    selectActive(1);
+    updateMap(usMapData);
+}
+function mapbutton3(){
+    selectActive(2);
+    updateMap(usMapData);
+}
 
-    function selectActive(num){
-        let buttons = document.getElementsByClassName('map-button');
-        for(i = 0; i < buttons.length; i++){
-            buttons[i].classList.remove('active-button');
-        }
-        buttons[num].classList.add('active-button');
-        active = num;
+function selectActive(num){
+    let buttons = document.getElementsByClassName('map-button');
+    for(i = 0; i < buttons.length; i++){
+        buttons[i].classList.remove('active-button');
     }
+    buttons[num].classList.add('active-button');
+    active = num;
+}
 
+function renderThirdChart(){
     let dataVisualized = 0;
             
     let canvas = d3_v3.select('#murder-rate-graph').append('svg')
