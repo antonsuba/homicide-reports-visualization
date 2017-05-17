@@ -11,50 +11,50 @@
 }
 </style>
     
-<title>My first d3 plot</title>
+<title>My first d3_v4 plot</title>
 </head>
 <body>
     <svg id="race-sex-svg" width="1100" height="1100" transform = "rotate(-180 100 100)"></svg></div>
 
-<script src="js/d3.min-v3.js"></script> 
-<script src="js/d3.min-v4.js"></script> 
+<script src="js/d3_v4.min-v3.js"></script> 
+<script src="js/d3_v4.min-v4.js"></script> 
 <script>
 
-let svg = d3.select("#race-sex-svg"),
+let svg = d3_v4.select("#race-sex-svg"),
     margin = {top: 100, right: 100, bottom: 30, left: 20},
     width = +svg.attr("width"),
     height = +svg.attr("height") ,
     g = svg.append("g").attr("transform", "translate(" + margin.right + "," + 50 + ")");
 
 
-let y = d3.scaleBand()
+let y = d3_v4.scaleBand()
     .rangeRound([0, width-200])
     .padding(0.6)
     .align(0.15);
 
-let x = d3.scaleLinear()
+let x = d3_v4.scaleLinear()
     .rangeRound([900-200, 0]);
 
-let vert = d3.scaleBand()
+let vert = d3_v4.scaleBand()
     .domain(["White Male", "White Female", "Native American/Alaska Native-Male", "Native American/Alska Native-Female","Black-Male","Black-Female", "Asian/Pacific Islander-Male","Asian/Pacific Islander-Female",])
     .rangeRound([0, width-200])
     .padding(0.6)
     .align(0.15);
 
-let yAxis = d3.axisRight()
+let yAxis = d3_v4.axisRight()
     .tickSizeOuter(0)
     .scale(vert)
     
 
-let z = d3.scaleOrdinal()
+let z = d3_v4.scaleOrdinal()
     .range(["#0c0101", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ebf442","#364cbc"]);
 
-let stack = d3.stack()
-    .offset(d3.stackOffsetExpand);
+let stack = d3_v4.stack()
+    .offset(d3_v4.stackOffsetExpand);
 
 
 
-d3.csv("data/VictimPerpetratorRaceAndSex.csv", function(error, data) {
+d3_v4.csv("data/VictimPerpetratorRaceAndSex.csv", function(error, data) {
     if (error) throw error;
     console.log(data);
     data.sort(function(a, b) { return b[data.columns[1]] / b.total - a[data.columns[1]] / a.total; });
@@ -80,7 +80,7 @@ serie.selectAll("rect")
 
 g.append("g")
     .attr("class", "axis axis--x")
-    .call(d3.axisTop(x).ticks(10,"%"))
+    .call(d3_v4.axisTop(x).ticks(10,"%"))
     .attr("transforn", "scale(-1,1)")
     .style("text-anchor", "end")
     .selectAll("text")  
