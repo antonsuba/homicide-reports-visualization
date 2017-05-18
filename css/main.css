@@ -20,6 +20,13 @@ h1 {
   position: absolute;
   z-index: 100; }
 
+.cover {
+  background-image: linear-gradient(-20deg, #616161 0%, #9bc5c3 100%); }
+
+.cover-header {
+  color: white;
+  font-size: 4em; }
+
 .active-button {
   color: #FFFFFF !important;
   background-color: #243949 !important; }

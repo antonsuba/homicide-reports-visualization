@@ -17,6 +17,13 @@
 </head>
 <body>
 
+<div class="uk-cover-container uk-flex uk-flex-center uk-flex-middle cover uk-text-center" uk-height-viewport>
+  <img src="cover.jpg" alt="cover" style="filter:brightness(40%);" uk-cover>
+  <div class="uk-position-center uk-overlay">
+    <h1 class="cover-header">U.S. Murder Data <br>1980 - 2014</h1>
+  </div>
+</div>
+
 <div class="uk-container">
   
   <div class="uk-grid-large" uk-grid uk-height-viewport>
@@ -37,8 +44,8 @@
         <div id="relationship-graph"></div>
         <div class="uk-flex uk-flex-center">
           <!--<div class="uk-button-group">-->
-            <button id="chart1-male-btn" class="uk-button uk-button-default active-button">Male</button>
-            <button id="chart1-female-btn" class="uk-button uk-button-default">Female</button>
+            <button id="chart1-male-btn" class="uk-button uk-button-default active-button" onclick="changeActive(this, 'chart1-female-btn')">Male</button>
+            <button id="chart1-female-btn" class="uk-button uk-button-default" onclick="changeActive(this, 'chart1-male-btn')">Female</button>
           <!--</div>-->
         </div>
       </div>

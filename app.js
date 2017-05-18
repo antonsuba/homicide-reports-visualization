@@ -160,6 +160,11 @@ function updateHorizontalChart(dataSet, widthArray, offset){
         .duration(800)
 }
 
+function changeActive(thisBtn, nextBtn){
+    thisBtn.classList.add('active-button');
+    document.getElementById(nextBtn).classList.remove('active-button');
+}
+
 
 //=========================
 // Initialize Second Chart
@@ -241,6 +246,11 @@ function renderSecondChart(){
         .call(yAxis)
         .selectAll("text")
         .attr("transform", "rotate(180,95,0)");
+
+    // serie.selectAll('rect')
+    //     .transition()
+    //     .duration(1200)
+    //     .attr("width", function(d) { return x(d[0]) - x(d[1]); });
 
     let legend = g.selectAll(".legend")
         .data(data.columns.slice(1).reverse())
@@ -477,6 +487,17 @@ function activateTooltip(event){
     
 }
 
-renderFirstChart();
+let rendered = false;
+function scroll(ev){
+    let height = window.innerHeight
+        || document.documentElement.clientHeight
+        || document.body.clientHeight;
+    if(window.pageYOffset>height - 400 && !rendered) {
+        rendered = true;
+        renderFirstChart();
+    }
+}
+window.onscroll=scroll
+// renderFirstChart();
 renderSecondChart();
 renderThirdChart();
