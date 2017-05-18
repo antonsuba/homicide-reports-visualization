@@ -23,6 +23,7 @@ h1{
 }
 
 #tooltip {
+    font-size: 0.9em;
     color: #eee;
     background-color: #222;
     padding: 1em;
@@ -46,7 +47,8 @@ h1{
 }
 
 .active-button{
-	// background-color: #264270; 
+    color: #FFFFFF !important;
+	background-color: #243949 !important; 
 }
 
 //=========================
@@ -61,6 +63,17 @@ $container-max-width: 1360px;
 //=========================
 @import "uikit/src/scss/variables-theme.scss";
 @import "uikit/src/scss/mixins-theme.scss";
+
+@mixin hook-button-default(){
+    color: #243949;
+    border: 2px #243949 solid;
+}
+
+@mixin hook-button-default-hover(){
+    color: #FFFFFF;
+    background: #243949;
+    border: 2px #243949 solid;
+}
 
 
 //=========================

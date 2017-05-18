@@ -1,7 +1,7 @@
 //=========================
 // Global Vars
 //=========================
-let width = 820,
+let width = 940,
     height = 450;
 
 let firstChartState = 1;
@@ -15,21 +15,22 @@ function renderFirstChart(){
     d3_v3.csv('data/CrimeByRelationshipBySex.csv', d => {
         return {
             victim_sex: d.victim_sex,
-            acquaintance_friend: d.Acquaintance_Friend,
-            boyfriend_girlfriend: d.Boyfriend_Girlfriend,
-            family: d.Family,
-            spouse: d.Spouse,
-            ex_spouse: d.Ex_Spouse,
-            coworker: d.Coworker,
-            neighbor: d.Neighbor,
-            stranger: d.Stranger
+            'Acquaintance': d.Acquaintance,
+            'Boyfriend / Girlfriend': d.Boyfriend_Girlfriend,
+            'Family': d.Family,
+            'Spouse': d.Spouse,
+            'Ex Spouse': d.Ex_Spouse,
+            'Coworker': d.Coworker,
+            'Neighbor': d.Neighbor,
+            'Stranger': d.Stranger
         };
     },
     function (error, data){
-        let maxData = 126000;
+        let maxData = 50;
+        let offset = 167;
         let margin = {
-            left:70,
-            right:70
+            left:0,
+            right:244
         }
 
         let crimeByRelationshipBySex = d3_v3.nest()
@@ -41,10 +42,12 @@ function renderFirstChart(){
 
             for(let objKey of Object.keys(tempArray)){
                 if(objKey == 'victim_sex') continue;
-                firstChartArray[i].push({ key:objKey, value:tempArray[objKey] })
+                firstChartArray[i].push({ key:objKey, value: tempArray[objKey] })
             }
             firstChartArray[i].sort((a,b) => b.value - a.value);
         }
+
+        //console.log(firstChartArray);
 
         let svg = d3_v3.select('#relationship-graph').append('svg')
             .attr("width", width)
@@ -66,6 +69,8 @@ function renderFirstChart(){
 
         let horizontalChart = svg.append('g')
             .attr('class', 'y axis')
+            .attr('transform', `translate(${offset}, -22)`)
+            .attr('style', 'font-size:0.75em')
             .call(yAxis);
         
         let bars = svg.selectAll('.bar')
@@ -76,36 +81,40 @@ function renderFirstChart(){
         bars.append('rect')
             .attr('class', 'bar')
             .attr('y', d => y(d.key))
-            .attr('height', 8)
-            .attr('x', 0)
+            .attr('height', 9)
+            .attr('x', 10 + offset)
             .attr('width', 0)
+            .sort(function(a, b) {
+                 return d3.ascending(a, b);
+           })
             .transition()
             .duration(1500)
-            .attr('width', d => x(d.value));
+            .attr('width', d => x(d.value))
+            .attr('fill', '#00547F');
 
         bars.append('text')
             .attr('class', 'label')
             .attr("y", d => y(d.key) + y.rangeBand() / 8 + 4)
-            .attr("x", 10)
-            .text(d => d.value)
+            .attr("x", 18 + offset)
+            .text(d => (+d.value).toFixed(2) + '%')
             .transition()
             .duration(1500)
-            .attr("x", d => x(d.value) + 10);
+            .attr("x", d => x(d.value) + 18 + offset);
 
         d3_v3.select('#chart1-male-btn').on('click', () => {
             let widthArray = firstChartArray[1].map(d => x(d.value));
-            updateHorizontalChart(firstChartArray[1], widthArray);
+            updateHorizontalChart(firstChartArray[1], widthArray, offset);
         });
 
         d3_v3.select('#chart1-female-btn').on('click', () => {
             let widthArray = firstChartArray[0].map(d => x(d.value));
-            updateHorizontalChart(firstChartArray[0], widthArray);
+            updateHorizontalChart(firstChartArray[0], widthArray, offset);
         });
     }
     );
 }
 
-function updateHorizontalChart(dataSet, widthArray){
+function updateHorizontalChart(dataSet, widthArray, offset){
     
     let counter = -1;
     let bars = d3_v3.select("#relationship-graph").selectAll('.bar');
@@ -125,12 +134,30 @@ function updateHorizontalChart(dataSet, widthArray){
         .duration(1500)
         .text(() => {
             dataSetCounter++;
-            return dataSet[dataSetCounter].value;
+            return (+dataSet[dataSetCounter].value).toFixed(2) + '%';
         })
         .attr('x', () => {
             counter++;
-            return widthArray[counter] + 10;
+            return widthArray[counter] + 18 + offset;
         });
+
+    let y = d3_v3.scale.ordinal()
+        .rangeRoundBands([0, height], .1)
+        .domain(dataSet.map(d => d.key));
+
+    let yAxis = d3_v3.svg.axis()
+        .scale(y)
+        .tickSize(0)
+        .orient('left');
+
+    let horizontalChart = d3_v3.select('#relationship-graph')
+        .select('svg')
+        .selectAll('g.y.axis')
+        .transition()
+        .duration(800)
+        .call(yAxis)
+        .transition()
+        .duration(800)
 }
 
 
@@ -139,7 +166,7 @@ function updateHorizontalChart(dataSet, widthArray){
 //=========================
 function renderSecondChart(){
     let svg = d3_v4.select("#race-sex-svg"),
-        margin = {top: 0, right: 100, bottom: 30, left: 20},
+        margin = {top: 0, right: 110, bottom: 30, left: 0},
         width = +svg.attr("width"),
         height = +svg.attr("height") ,
         g = svg.append("g").attr("transform", "translate(" + margin.right + "," + 50 + ")");
@@ -155,7 +182,7 @@ function renderSecondChart(){
 
     let vert = d3_v4.scaleBand()
       //  .domain(["White Male", "White Female", "Native American/Alaska Native-Male", "Native American/Alska Native-Female","Black-Male","Black-Female", "Asian/Pacific Islander-Male","Asian/Pacific Islander-Female",])
-        .domain(["Asian/Pacific Islander-Female","Asian/Pacific Islander-Male","Black-Female","Black-Male","Native American/Alska Native-Female","Native American/Alaska Native-Male","White Female","White Male",])
+        .domain(["Asian/Pacific Islander-Female","Asian/Pacific Islander-Male","Black-Female","Black-Male","Native American/Alaska Native-Female","Native American/Alaska Native-Male","White Female","White Male",])
         .rangeRound([0, width - 500])
         .padding(0.5)
         .align(0.15);
@@ -166,7 +193,7 @@ function renderSecondChart(){
         
 
     let z = d3_v4.scaleOrdinal()
-        .range(["#0c0101", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ebf442","#364cbc"]);
+        .range(["#e43f6f", "#f56476", "#7F6B65", "#dfbbb1", "#00547F", "#008dd5", "#9CB2E5", "#373f51"]);
 
     let stack = d3_v4.stack()
         .offset(d3_v4.stackOffsetExpand);
@@ -310,19 +337,19 @@ function renderThirdChart(){
 
     let color1 = d3_v3.scale.linear()
                     .domain([30,80])
-                    .range(['#ff8c8c', '#724432']);
+                    .range(['#9CB2E5', '#373f51']);
 
     let color2 = d3_v3.scale.linear()
                     .domain([0,10])
-                    .range(['#689ef9', '#233a60']);
+                    .range(['#008dd5', '#00547F']);
                     
     let color3 = d3_v3.scale.linear()
                     .domain([1,13])
-                    .range(['#d1a262', '#4c391f']);
+                    .range(['#dfbbb1', '#7F6B65']);
 
     let projection = d3_v3.geo.albersUsa().scale(1000).translate([480, 250]);
     let path = d3_v3.geo.path().projection(projection);
-    let tooltip = d3_v3.select('body').append('div').attr('id', 'tooltip').attr('class', 'hidden');
+    let tooltip = d3_v3.select('#murder-rate-graph').append('div').attr('id', 'tooltip').attr('class', 'hidden');
 
     let usMapData;
     let murderByState;
@@ -367,7 +394,6 @@ function renderThirdChart(){
                 return color1(states.get(d.properties.NAME)[0]);
             })
             .on('mousemove', function(d,i){
-                console.log('hit');
                 d3_v3.select(this).style('fill-opacity', 0.7);
                 let mouse = d3_v3.mouse(canvas.node()).map(function(d){
                     return parseInt(d);
@@ -445,6 +471,10 @@ function renderThirdChart(){
     }
 
     renderThirdChart.updateMap = updateMap;
+}
+
+function activateTooltip(event){
+    
 }
 
 renderFirstChart();

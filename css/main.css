@@ -11,6 +11,7 @@ h1 {
   display: none; }
 
 #tooltip {
+  font-size: 0.9em;
   color: #eee;
   background-color: #222;
   padding: 1em;
@@ -18,6 +19,10 @@ h1 {
   opacity: 0.9;
   position: absolute;
   z-index: 100; }
+
+.active-button {
+  color: #FFFFFF !important;
+  background-color: #243949 !important; }
 
 /* ========================================================================
    Component: Base
@@ -1694,14 +1699,17 @@ select.uk-form-width-xsmall {
 .uk-button-default {
   background-color: transparent;
   color: #333;
-  border: 1px solid #e5e5e5; }
+  color: #243949;
+  border: 2px #243949 solid; }
 
 /* Hover + Focus */
 .uk-button-default:hover,
 .uk-button-default:focus {
   background-color: transparent;
   color: #333;
-  border-color: #b2b2b2; }
+  color: #FFFFFF;
+  background: #243949;
+  border: 2px #243949 solid; }
 
 /* OnClick + Active */
 .uk-button-default:active,
